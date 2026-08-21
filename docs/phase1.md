@@ -1,8 +1,8 @@
-# 📘 Phase 1: OpenTelemetry Distributed Tracing & Span Collector
+# Phase 1: OpenTelemetry Distributed Tracing & Span Collector
 
 ---
 
-## 🎯 1. Overview & Objective
+## 1. Overview & Objective
 
 In multi-agent and RAG architectures, single user prompts trigger cascading asynchronous operations across **vector search retrievers, tool execution sandboxes, LLM generation nodes, and output guardrails**.
 - Without distributed tracing, identifying the root cause of a 3-second latency spike or a hallucinated response requires manual, fragmented log inspection.
@@ -15,25 +15,25 @@ In multi-agent and RAG architectures, single user prompts trigger cascading asyn
 
 ---
 
-## 📐 2. Distributed Trace Hierarchy & Span Taxonomy
+## 2. Distributed Trace Hierarchy & Span Taxonomy
 
 ```
-┌─────────────────────────────────────────────────────────────────────────────┐
-│                    HIERARCHICAL TRACE SPAN WATERFALL                        │
-├─────────────────────────────────────────────────────────────────────────────┤
-│  Trace ID: tr_99a81b2c (Total Duration: 642ms | Total Tokens: 1,420)        │
-│                                                                             │
-│  [AGENT: Supervisor Graph] ────────────────────────────────────────── (642ms)│
-│    │                                                                        │
-│    ├── [RETRIEVER: pgvector HNSW Search] ──────── (45ms)                    │
-│    │     Input: "What is PagedAttention?" | 4 Chunks Retrieved              │
-│    │                                                                        │
-│    ├── [TOOL: Redis Semantic Cache Probe] ────── (1.2ms)                   │
-│    │     Status: Cache Miss                                                 │
-│    │                                                                        │
-│    └── [LLM: Llama-3.2-1B-Instruct] ──────────────────────── (580ms)        │
-│          Tokens: Prompt=120, Completion=350 | Throughput=145 tok/s          │
-└─────────────────────────────────────────────────────────────────────────────┘
+
+ HIERARCHICAL TRACE SPAN WATERFALL 
+
+ Trace ID: tr_99a81b2c (Total Duration: 642ms | Total Tokens: 1,420) 
+ 
+ [AGENT: Supervisor Graph] (642ms)
+ 
+ [RETRIEVER: pgvector HNSW Search] (45ms) 
+ Input: "What is PagedAttention?" | 4 Chunks Retrieved 
+ 
+ [TOOL: Redis Semantic Cache Probe] (1.2ms) 
+ Status: Cache Miss 
+ 
+ [LLM: Llama-3.2-1B-Instruct] (580ms) 
+ Tokens: Prompt=120, Completion=350 | Throughput=145 tok/s 
+
 ```
 
 ### Span Kinds & Semantic Attributes:
@@ -44,7 +44,7 @@ In multi-agent and RAG architectures, single user prompts trigger cascading asyn
 
 ---
 
-## 🛠️ 3. Step-by-Step Code Walkthrough
+## 3. Step-by-Step Code Walkthrough
 
 ### Step 1: Trace Data Models (`src/tracing/models.py`)
 - `SpanKind`: Enum categorizing operation types.
@@ -59,7 +59,7 @@ In multi-agent and RAG architectures, single user prompts trigger cascading asyn
 
 ---
 
-## 🧪 4. How to Run & Verify Phase 1
+## 4. How to Run & Verify Phase 1
 
 ### Command:
 ```bash
@@ -79,7 +79,7 @@ In multi-agent and RAG architectures, single user prompts trigger cascading asyn
 
 ---
 
-## 💡 5. Technical Questions & Architectural Explanations
+## 5. Technical Questions & Architectural Explanations
 
 ### Q: Why decouple trace span collection from synchronous logging?
 > **Answer:** Synchronous logging during inference adds I/O blocking overhead to generation loops. Asynchronous OpenTelemetry collectors buffer span telemetry in-memory and dispatch trace batches in background tasks via non-blocking queues, ensuring zero latency degradation on real-time token streaming.

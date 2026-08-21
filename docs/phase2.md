@@ -1,8 +1,8 @@
-# 📘 Phase 2: Automated LLM Evaluation Triad Engine (Ragas / DeepEval Standard)
+# Phase 2: Automated LLM Evaluation Triad Engine (Ragas / DeepEval Standard)
 
 ---
 
-## 🎯 1. Overview & Objective
+## 1. Overview & Objective
 
 Deploying LLM applications to production without quantitative evaluation creates severe risks of **silent hallucinations, low retrieval precision, and off-topic responses**.
 - Traditional machine learning metrics (BLEU, ROUGE) fail for Generative AI because they rely on exact n-gram overlap rather than semantic truthfulness.
@@ -16,20 +16,20 @@ Deploying LLM applications to production without quantitative evaluation creates
 
 ---
 
-## 📐 2. Mathematical Modeling of the Evaluation Triad
+## 2. Mathematical Modeling of the Evaluation Triad
 
 ```
-┌─────────────────────────────────────────────────────────────────────────────┐
-│                       RAGAS EVALUATION TRIAD PIPELINE                       │
-├─────────────────────────────────────────────────────────────────────────────┤
-│   User Query ────────► [ Context Precision ] ◄──────── Retrieved Contexts  │
-│        │                                                      │             │
-│        ▼                                                      ▼             │
-│   [ Generated Answer ] ──► [ Faithfulness (Grounding) ] ◄─────┘             │
-│        │                                                                    │
-│        ▼                                                                    │
-│   [ Answer Relevance ] ──► (Score >= 0.85? ──► APPROVED / REGRESSION FLAG) │
-└─────────────────────────────────────────────────────────────────────────────┘
+
+ RAGAS EVALUATION TRIAD PIPELINE 
+
+ User Query [ Context Precision ] Retrieved Contexts 
+ 
+ 
+ [ Generated Answer ] [ Faithfulness (Grounding) ] 
+ 
+ 
+ [ Answer Relevance ] (Score >= 0.85? APPROVED / REGRESSION FLAG) 
+
 ```
 
 ### A. Faithfulness Score Formula
@@ -42,7 +42,7 @@ $$\text{Answer Relevance} = \max\left(0, \frac{\vec{e}_{\text{query}} \cdot \vec
 
 ---
 
-## 🛠️ 3. Step-by-Step Code Walkthrough
+## 3. Step-by-Step Code Walkthrough
 
 ### Step 1: Evaluation Data Models (`src/evals/models.py`)
 - `EvaluationMetricType`: Enum (`FAITHFULNESS`, `ANSWER_RELEVANCE`, `CONTEXT_PRECISION`, `TOXICITY`).
@@ -57,7 +57,7 @@ $$\text{Answer Relevance} = \max\left(0, \frac{\vec{e}_{\text{query}} \cdot \vec
 
 ---
 
-## 🧪 4. How to Run & Verify Phase 2
+## 4. How to Run & Verify Phase 2
 
 ### Command:
 ```bash
@@ -77,7 +77,7 @@ $$\text{Answer Relevance} = \max\left(0, \frac{\vec{e}_{\text{query}} \cdot \vec
 
 ---
 
-## 💡 5. Technical Questions & Architectural Explanations
+## 5. Technical Questions & Architectural Explanations
 
 ### Q: Why is Faithfulness decoupled from Answer Relevance in RAG evaluation?
 > **Answer:** An answer can be 100% faithful to retrieved context while completely failing to answer the user's prompt (e.g. summarizing unrelated retrieved text). Conversely, an answer can perfectly answer the question using pretrained parametric knowledge while hallucinating details unsupported by enterprise documents. Decoupling the metrics allows pinpointing whether retrieval or generation is the root cause of failure.

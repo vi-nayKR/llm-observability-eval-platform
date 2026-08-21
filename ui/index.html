@@ -1,286 +1,286 @@
 <!DOCTYPE html>
 <html lang="en" class="dark">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>LLM Observability &amp; Evaluation · OpenAI Interface</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-  <script>
-    tailwind.config = {
-      darkMode: 'class',
-      theme: {
-        extend: {
-          fontFamily: {
-            sans: ['Inter', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
-            mono: ['JetBrains Mono', 'monospace']
-          },
-          colors: {
-            chatgpt: {
-              main: '#212121',
-              sidebar: '#171717',
-              input: '#2f2f2f',
-              hover: '#2f2f2f',
-              border: '#303030',
-              text: '#ececec',
-              muted: '#b4b4b4',
-              subtle: '#676767',
-              green: '#10a37f',
-              greenHover: '#1a7f64',
-              userMsg: '#2f2f2f'
-            }
-          }
-        }
-      }
-    }
-  </script>
-  <style>
-    ::-webkit-scrollbar { width: 6px; height: 6px; }
-    ::-webkit-scrollbar-track { background: transparent; }
-    ::-webkit-scrollbar-thumb { background: #424242; border-radius: 9999px; }
-    ::-webkit-scrollbar-thumb:hover { background: #565656; }
-  </style>
+ <meta charset="UTF-8" />
+ <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+ <title>LLM Observability &amp; Evaluation · OpenAI Interface</title>
+ <script src="https://cdn.tailwindcss.com"></script>
+ <link rel="preconnect" href="https://fonts.googleapis.com">
+ <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+ <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+ <script>
+ tailwind.config = {
+ darkMode: 'class',
+ theme: {
+ extend: {
+ fontFamily: {
+ sans: ['Inter', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
+ mono: ['JetBrains Mono', 'monospace']
+ },
+ colors: {
+ chatgpt: {
+ main: '#212121',
+ sidebar: '#171717',
+ input: '#2f2f2f',
+ hover: '#2f2f2f',
+ border: '#303030',
+ text: '#ececec',
+ muted: '#b4b4b4',
+ subtle: '#676767',
+ green: '#10a37f',
+ greenHover: '#1a7f64',
+ userMsg: '#2f2f2f'
+ }
+ }
+ }
+ }
+ }
+ </script>
+ <style>
+ ::-webkit-scrollbar { width: 6px; height: 6px; }
+ ::-webkit-scrollbar-track { background: transparent; }
+ ::-webkit-scrollbar-thumb { background: #424242; border-radius: 9999px; }
+ ::-webkit-scrollbar-thumb:hover { background: #565656; }
+ </style>
 </head>
 <body class="bg-chatgpt-main text-chatgpt-text font-sans antialiased h-screen flex overflow-hidden">
 
-  <!-- Left Sidebar -->
-  <aside class="w-64 bg-chatgpt-sidebar border-r border-chatgpt-border flex flex-col justify-between shrink-0 z-30">
-    <div class="p-3 space-y-3">
-      <!-- Header -->
-      <div class="flex items-center gap-2.5 px-2 py-2">
-        <div class="w-7 h-7 rounded-full bg-white text-black flex items-center justify-center font-bold text-xs">
-          <svg class="w-4 h-4 text-black" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
-            <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
-          </svg>
-        </div>
-        <div class="font-bold text-sm text-chatgpt-text">LLMObservability <span class="text-chatgpt-green">AI</span></div>
-      </div>
+ <!-- Left Sidebar -->
+ <aside class="w-64 bg-chatgpt-sidebar border-r border-chatgpt-border flex flex-col justify-between shrink-0 z-30">
+ <div class="p-3 space-y-3">
+ <!-- Header -->
+ <div class="flex items-center gap-2.5 px-2 py-2">
+ <div class="w-7 h-7 rounded-full bg-white text-black flex items-center justify-center font-bold text-xs">
+ <svg class="w-4 h-4 text-black" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+ <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+ </svg>
+ </div>
+ <div class="font-bold text-sm text-chatgpt-text">LLMObservability <span class="text-chatgpt-green">AI</span></div>
+ </div>
 
-      <!-- Presets & Trace Sessions -->
-      <div class="pt-2 border-t border-chatgpt-border space-y-2">
-        <span class="text-[11px] font-semibold text-chatgpt-subtle tracking-wider uppercase px-2">Active Traces</span>
-        
-        <button onclick="loadSampleTrace('rag')" class="w-full text-left px-3 py-2.5 rounded-xl bg-chatgpt-main hover:bg-chatgpt-hover border border-chatgpt-border text-xs font-medium text-chatgpt-text transition-colors flex items-center justify-between group cursor-pointer">
-          <div class="flex items-center gap-2">
-            <span class="w-2 h-2 rounded-full bg-chatgpt-green"></span>
-            <span>RAG Query Pipeline</span>
-          </div>
-          <span class="text-[10px] text-chatgpt-subtle font-mono">642ms</span>
-        </button>
+ <!-- Presets & Trace Sessions -->
+ <div class="pt-2 border-t border-chatgpt-border space-y-2">
+ <span class="text-[11px] font-semibold text-chatgpt-subtle tracking-wider uppercase px-2">Active Traces</span>
+ 
+ <button onclick="loadSampleTrace('rag')" class="w-full text-left px-3 py-2.5 rounded-xl bg-chatgpt-main hover:bg-chatgpt-hover border border-chatgpt-border text-xs font-medium text-chatgpt-text transition-colors flex items-center justify-between group cursor-pointer">
+ <div class="flex items-center gap-2">
+ <span class="w-2 h-2 rounded-full bg-chatgpt-green"></span>
+ <span>RAG Query Pipeline</span>
+ </div>
+ <span class="text-[10px] text-chatgpt-subtle font-mono">642ms</span>
+ </button>
 
-        <button onclick="loadSampleTrace('agent')" class="w-full text-left px-3 py-2.5 rounded-xl bg-chatgpt-main hover:bg-chatgpt-hover border border-chatgpt-border text-xs font-medium text-chatgpt-text transition-colors flex items-center justify-between group cursor-pointer">
-          <div class="flex items-center gap-2">
-            <span class="w-2 h-2 rounded-full bg-purple-400"></span>
-            <span>Multi-Agent Supervisor</span>
-          </div>
-          <span class="text-[10px] text-chatgpt-subtle font-mono">1,120ms</span>
-        </button>
-      </div>
+ <button onclick="loadSampleTrace('agent')" class="w-full text-left px-3 py-2.5 rounded-xl bg-chatgpt-main hover:bg-chatgpt-hover border border-chatgpt-border text-xs font-medium text-chatgpt-text transition-colors flex items-center justify-between group cursor-pointer">
+ <div class="flex items-center gap-2">
+ <span class="w-2 h-2 rounded-full bg-purple-400"></span>
+ <span>Multi-Agent Supervisor</span>
+ </div>
+ <span class="text-[10px] text-chatgpt-subtle font-mono">1,120ms</span>
+ </button>
+ </div>
 
-      <!-- Telemetry Health HUD -->
-      <div class="p-3 rounded-xl bg-chatgpt-main border border-chatgpt-border space-y-2 text-xs">
-        <div class="flex items-center justify-between">
-          <span class="text-chatgpt-subtle text-[11px] font-semibold uppercase">System Health</span>
-          <span class="text-[10px] font-mono text-chatgpt-green bg-chatgpt-green/10 px-1.5 py-0.5 rounded font-bold">HEALTHY</span>
-        </div>
-        <div class="grid grid-cols-2 gap-2 text-[11px] font-mono pt-1">
-          <div class="bg-chatgpt-sidebar p-2 rounded-lg">
-            <div class="text-chatgpt-subtle text-[10px]">P95 LATENCY</div>
-            <div class="text-chatgpt-text font-bold text-sm">62.5ms</div>
-          </div>
-          <div class="bg-chatgpt-sidebar p-2 rounded-lg">
-            <div class="text-chatgpt-subtle text-[10px]">HOURLY SPEND</div>
-            <div class="text-chatgpt-green font-bold text-sm">$0.14</div>
-          </div>
-        </div>
-      </div>
-    </div>
+ <!-- Telemetry Health HUD -->
+ <div class="p-3 rounded-xl bg-chatgpt-main border border-chatgpt-border space-y-2 text-xs">
+ <div class="flex items-center justify-between">
+ <span class="text-chatgpt-subtle text-[11px] font-semibold uppercase">System Health</span>
+ <span class="text-[10px] font-mono text-chatgpt-green bg-chatgpt-green/10 px-1.5 py-0.5 rounded font-bold">HEALTHY</span>
+ </div>
+ <div class="grid grid-cols-2 gap-2 text-[11px] font-mono pt-1">
+ <div class="bg-chatgpt-sidebar p-2 rounded-lg">
+ <div class="text-chatgpt-subtle text-[10px]">P95 LATENCY</div>
+ <div class="text-chatgpt-text font-bold text-sm">62.5ms</div>
+ </div>
+ <div class="bg-chatgpt-sidebar p-2 rounded-lg">
+ <div class="text-chatgpt-subtle text-[10px]">HOURLY SPEND</div>
+ <div class="text-chatgpt-green font-bold text-sm">$0.14</div>
+ </div>
+ </div>
+ </div>
+ </div>
 
-    <!-- User Profile Footer -->
-    <div class="p-3 border-t border-chatgpt-border">
-      <div class="flex items-center gap-3 px-2 py-2 rounded-lg hover:bg-chatgpt-hover transition-colors">
-        <div class="w-8 h-8 rounded-full bg-gradient-to-tr from-chatgpt-green to-emerald-300 flex items-center justify-center font-bold text-xs text-black">
-          VK
-        </div>
-        <div class="flex-1 min-w-0">
-          <div class="text-sm font-medium text-chatgpt-text truncate">Vinay K R</div>
-          <div class="text-xs text-chatgpt-subtle truncate">MLOps &amp; Eval Architect</div>
-        </div>
-      </div>
-    </div>
-  </aside>
+ <!-- User Profile Footer -->
+ <div class="p-3 border-t border-chatgpt-border">
+ <div class="flex items-center gap-3 px-2 py-2 rounded-lg hover:bg-chatgpt-hover transition-colors">
+ <div class="w-8 h-8 rounded-full bg-gradient-to-tr from-chatgpt-green to-emerald-300 flex items-center justify-center font-bold text-xs text-black">
+ VK
+ </div>
+ <div class="flex-1 min-w-0">
+ <div class="text-sm font-medium text-chatgpt-text truncate">Vinay K R</div>
+ <div class="text-xs text-chatgpt-subtle truncate">MLOps &amp; Eval Architect</div>
+ </div>
+ </div>
+ </div>
+ </aside>
 
-  <!-- Main Viewport -->
-  <div class="flex-1 flex flex-col h-full bg-chatgpt-main overflow-hidden">
-    
-    <!-- Top Action Bar -->
-    <header class="h-14 border-b border-chatgpt-border px-6 flex items-center justify-between shrink-0 bg-chatgpt-main/90 backdrop-blur-sm z-20">
-      <div class="flex items-center gap-3">
-        <span class="text-sm font-semibold text-chatgpt-text" id="trace-id-badge">Trace: tr_99a81b2c</span>
-        <span class="text-xs font-mono px-2 py-0.5 rounded bg-chatgpt-sidebar border border-chatgpt-border text-chatgpt-green">OpenTelemetry 1.28</span>
-        <span class="text-xs font-mono px-2 py-0.5 rounded bg-chatgpt-sidebar border border-chatgpt-border text-purple-400">Ragas Triad Active</span>
-      </div>
-      <div class="flex items-center gap-2">
-        <button onclick="runTraceEval()" class="px-4 py-1.5 rounded-xl bg-white text-black font-semibold text-xs hover:bg-gray-200 transition-colors cursor-pointer shadow-sm">
-          ⚡ Run Trace &amp; Eval
-        </button>
-      </div>
-    </header>
+ <!-- Main Viewport -->
+ <div class="flex-1 flex flex-col h-full bg-chatgpt-main overflow-hidden">
+ 
+ <!-- Top Action Bar -->
+ <header class="h-14 border-b border-chatgpt-border px-6 flex items-center justify-between shrink-0 bg-chatgpt-main/90 backdrop-blur-sm z-20">
+ <div class="flex items-center gap-3">
+ <span class="text-sm font-semibold text-chatgpt-text" id="trace-id-badge">Trace: tr_99a81b2c</span>
+ <span class="text-xs font-mono px-2 py-0.5 rounded bg-chatgpt-sidebar border border-chatgpt-border text-chatgpt-green">OpenTelemetry 1.28</span>
+ <span class="text-xs font-mono px-2 py-0.5 rounded bg-chatgpt-sidebar border border-chatgpt-border text-purple-400">Ragas Triad Active</span>
+ </div>
+ <div class="flex items-center gap-2">
+ <button onclick="runTraceEval()" class="px-4 py-1.5 rounded-xl bg-white text-black font-semibold text-xs hover:bg-gray-200 transition-colors cursor-pointer shadow-sm">
+ Run Trace &amp; Eval
+ </button>
+ </div>
+ </header>
 
-    <!-- Split Screen Content Grid -->
-    <div class="flex-1 grid grid-cols-1 lg:grid-cols-2 gap-6 p-6 overflow-hidden">
-      
-      <!-- Left Pane: OpenTelemetry Trace Waterfall -->
-      <div class="flex flex-col rounded-2xl bg-chatgpt-sidebar border border-chatgpt-border overflow-hidden">
-        <div class="p-3 border-b border-chatgpt-border bg-chatgpt-main/40 flex items-center justify-between text-xs">
-          <span class="font-medium text-chatgpt-muted flex items-center gap-2">
-            <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
-            Trace Span Waterfall Timeline
-          </span>
-          <span class="text-[10px] font-mono text-chatgpt-subtle">Total Duration: 642ms</span>
-        </div>
-        
-        <div class="flex-1 p-5 overflow-y-auto space-y-4 font-mono text-xs">
-          
-          <!-- Span 1: Root Agent -->
-          <div class="p-3 rounded-xl bg-chatgpt-main border border-chatgpt-border space-y-1.5">
-            <div class="flex justify-between items-center">
-              <span class="font-bold text-chatgpt-text flex items-center gap-1.5">
-                <span class="w-2 h-2 rounded-full bg-blue-400"></span>
-                [AGENT] rag_supervisor_graph
-              </span>
-              <span class="text-chatgpt-muted text-[11px]">642.0 ms</span>
-            </div>
-            <div class="w-full bg-chatgpt-sidebar rounded-full h-2 overflow-hidden">
-              <div class="bg-blue-500 h-full w-full"></div>
-            </div>
-          </div>
+ <!-- Split Screen Content Grid -->
+ <div class="flex-1 grid grid-cols-1 lg:grid-cols-2 gap-6 p-6 overflow-hidden">
+ 
+ <!-- Left Pane: OpenTelemetry Trace Waterfall -->
+ <div class="flex flex-col rounded-2xl bg-chatgpt-sidebar border border-chatgpt-border overflow-hidden">
+ <div class="p-3 border-b border-chatgpt-border bg-chatgpt-main/40 flex items-center justify-between text-xs">
+ <span class="font-medium text-chatgpt-muted flex items-center gap-2">
+ <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+ Trace Span Waterfall Timeline
+ </span>
+ <span class="text-[10px] font-mono text-chatgpt-subtle">Total Duration: 642ms</span>
+ </div>
+ 
+ <div class="flex-1 p-5 overflow-y-auto space-y-4 font-mono text-xs">
+ 
+ <!-- Span 1: Root Agent -->
+ <div class="p-3 rounded-xl bg-chatgpt-main border border-chatgpt-border space-y-1.5">
+ <div class="flex justify-between items-center">
+ <span class="font-bold text-chatgpt-text flex items-center gap-1.5">
+ <span class="w-2 h-2 rounded-full bg-blue-400"></span>
+ [AGENT] rag_supervisor_graph
+ </span>
+ <span class="text-chatgpt-muted text-[11px]">642.0 ms</span>
+ </div>
+ <div class="w-full bg-chatgpt-sidebar rounded-full h-2 overflow-hidden">
+ <div class="bg-blue-500 h-full w-full"></div>
+ </div>
+ </div>
 
-          <!-- Span 2: Retriever (Child) -->
-          <div class="p-3 rounded-xl bg-chatgpt-main border border-chatgpt-border space-y-1.5 ml-4">
-            <div class="flex justify-between items-center">
-              <span class="font-bold text-chatgpt-text flex items-center gap-1.5">
-                <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
-                [RETRIEVER] pgvector_hnsw_hybrid
-              </span>
-              <span class="text-chatgpt-green text-[11px]">45.2 ms</span>
-            </div>
-            <div class="w-full bg-chatgpt-sidebar rounded-full h-2 overflow-hidden">
-              <div class="bg-emerald-500 h-full w-[15%]"></div>
-            </div>
-            <div class="text-[11px] text-chatgpt-subtle">Retrieved: 4 chunks (RRF k=60)</div>
-          </div>
+ <!-- Span 2: Retriever (Child) -->
+ <div class="p-3 rounded-xl bg-chatgpt-main border border-chatgpt-border space-y-1.5 ml-4">
+ <div class="flex justify-between items-center">
+ <span class="font-bold text-chatgpt-text flex items-center gap-1.5">
+ <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+ [RETRIEVER] pgvector_hnsw_hybrid
+ </span>
+ <span class="text-chatgpt-green text-[11px]">45.2 ms</span>
+ </div>
+ <div class="w-full bg-chatgpt-sidebar rounded-full h-2 overflow-hidden">
+ <div class="bg-emerald-500 h-full w-[15%]"></div>
+ </div>
+ <div class="text-[11px] text-chatgpt-subtle">Retrieved: 4 chunks (RRF k=60)</div>
+ </div>
 
-          <!-- Span 3: LLM Inference (Child) -->
-          <div class="p-3 rounded-xl bg-chatgpt-main border border-chatgpt-border space-y-1.5 ml-4">
-            <div class="flex justify-between items-center">
-              <span class="font-bold text-chatgpt-text flex items-center gap-1.5">
-                <span class="w-2 h-2 rounded-full bg-purple-400"></span>
-                [LLM] vllm_llama_3_2_1b
-              </span>
-              <span class="text-purple-400 text-[11px]">580.4 ms</span>
-            </div>
-            <div class="w-full bg-chatgpt-sidebar rounded-full h-2 overflow-hidden">
-              <div class="bg-purple-500 h-full w-[85%] ml-[15%]"></div>
-            </div>
-            <div class="text-[11px] text-chatgpt-subtle">Tokens: Prompt=120, Completion=350 ($0.000228)</div>
-          </div>
+ <!-- Span 3: LLM Inference (Child) -->
+ <div class="p-3 rounded-xl bg-chatgpt-main border border-chatgpt-border space-y-1.5 ml-4">
+ <div class="flex justify-between items-center">
+ <span class="font-bold text-chatgpt-text flex items-center gap-1.5">
+ <span class="w-2 h-2 rounded-full bg-purple-400"></span>
+ [LLM] vllm_llama_3_2_1b
+ </span>
+ <span class="text-purple-400 text-[11px]">580.4 ms</span>
+ </div>
+ <div class="w-full bg-chatgpt-sidebar rounded-full h-2 overflow-hidden">
+ <div class="bg-purple-500 h-full w-[85%] ml-[15%]"></div>
+ </div>
+ <div class="text-[11px] text-chatgpt-subtle">Tokens: Prompt=120, Completion=350 ($0.000228)</div>
+ </div>
 
-        </div>
-      </div>
+ </div>
+ </div>
 
-      <!-- Right Pane: Ragas Evaluation Triad Scorecard -->
-      <div class="flex flex-col rounded-2xl bg-chatgpt-sidebar border border-chatgpt-border overflow-hidden">
-        
-        <!-- Scorecard Header -->
-        <div class="p-3 border-b border-chatgpt-border bg-chatgpt-main/40 flex items-center justify-between text-xs">
-          <span class="font-medium text-chatgpt-muted flex items-center gap-2">
-            <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm1 14h-2v-2h2zm0-4h-2V7h2z"/></svg>
-            Ragas Evaluation Triad Scorecard
-          </span>
-          <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-chatgpt-green/10 text-chatgpt-green border border-chatgpt-green/30 font-bold">ALL PASSED</span>
-        </div>
+ <!-- Right Pane: Ragas Evaluation Triad Scorecard -->
+ <div class="flex flex-col rounded-2xl bg-chatgpt-sidebar border border-chatgpt-border overflow-hidden">
+ 
+ <!-- Scorecard Header -->
+ <div class="p-3 border-b border-chatgpt-border bg-chatgpt-main/40 flex items-center justify-between text-xs">
+ <span class="font-medium text-chatgpt-muted flex items-center gap-2">
+ <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm1 14h-2v-2h2zm0-4h-2V7h2z"/></svg>
+ Ragas Evaluation Triad Scorecard
+ </span>
+ <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-chatgpt-green/10 text-chatgpt-green border border-chatgpt-green/30 font-bold">ALL PASSED</span>
+ </div>
 
-        <div class="flex-1 p-5 overflow-y-auto space-y-4">
-          
-          <!-- Metric 1: Faithfulness -->
-          <div class="p-4 rounded-xl bg-chatgpt-main border border-chatgpt-border space-y-2">
-            <div class="flex justify-between items-center">
-              <div>
-                <div class="text-xs font-bold text-chatgpt-text">Faithfulness (Anti-Hallucination)</div>
-                <div class="text-[11px] text-chatgpt-subtle">Verifiable claim grounding against retrieved context</div>
-              </div>
-              <span class="text-base font-mono font-bold text-chatgpt-green">1.000</span>
-            </div>
-            <div class="w-full bg-chatgpt-sidebar rounded-full h-2 overflow-hidden">
-              <div class="bg-chatgpt-green h-full w-[100%]"></div>
-            </div>
-          </div>
+ <div class="flex-1 p-5 overflow-y-auto space-y-4">
+ 
+ <!-- Metric 1: Faithfulness -->
+ <div class="p-4 rounded-xl bg-chatgpt-main border border-chatgpt-border space-y-2">
+ <div class="flex justify-between items-center">
+ <div>
+ <div class="text-xs font-bold text-chatgpt-text">Faithfulness (Anti-Hallucination)</div>
+ <div class="text-[11px] text-chatgpt-subtle">Verifiable claim grounding against retrieved context</div>
+ </div>
+ <span class="text-base font-mono font-bold text-chatgpt-green">1.000</span>
+ </div>
+ <div class="w-full bg-chatgpt-sidebar rounded-full h-2 overflow-hidden">
+ <div class="bg-chatgpt-green h-full w-[100%]"></div>
+ </div>
+ </div>
 
-          <!-- Metric 2: Answer Relevance -->
-          <div class="p-4 rounded-xl bg-chatgpt-main border border-chatgpt-border space-y-2">
-            <div class="flex justify-between items-center">
-              <div>
-                <div class="text-xs font-bold text-chatgpt-text">Answer Relevance</div>
-                <div class="text-[11px] text-chatgpt-subtle">Intent alignment to original prompt query</div>
-              </div>
-              <span class="text-base font-mono font-bold text-chatgpt-green">0.950</span>
-            </div>
-            <div class="w-full bg-chatgpt-sidebar rounded-full h-2 overflow-hidden">
-              <div class="bg-chatgpt-green h-full w-[95%]"></div>
-            </div>
-          </div>
+ <!-- Metric 2: Answer Relevance -->
+ <div class="p-4 rounded-xl bg-chatgpt-main border border-chatgpt-border space-y-2">
+ <div class="flex justify-between items-center">
+ <div>
+ <div class="text-xs font-bold text-chatgpt-text">Answer Relevance</div>
+ <div class="text-[11px] text-chatgpt-subtle">Intent alignment to original prompt query</div>
+ </div>
+ <span class="text-base font-mono font-bold text-chatgpt-green">0.950</span>
+ </div>
+ <div class="w-full bg-chatgpt-sidebar rounded-full h-2 overflow-hidden">
+ <div class="bg-chatgpt-green h-full w-[95%]"></div>
+ </div>
+ </div>
 
-          <!-- Metric 3: Context Precision -->
-          <div class="p-4 rounded-xl bg-chatgpt-main border border-chatgpt-border space-y-2">
-            <div class="flex justify-between items-center">
-              <div>
-                <div class="text-xs font-bold text-chatgpt-text">Context Precision</div>
-                <div class="text-[11px] text-chatgpt-subtle">Signal-to-noise ratio in retrieved passages</div>
-              </div>
-              <span class="text-base font-mono font-bold text-chatgpt-green">0.920</span>
-            </div>
-            <div class="w-full bg-chatgpt-sidebar rounded-full h-2 overflow-hidden">
-              <div class="bg-chatgpt-green h-full w-[92%]"></div>
-            </div>
-          </div>
+ <!-- Metric 3: Context Precision -->
+ <div class="p-4 rounded-xl bg-chatgpt-main border border-chatgpt-border space-y-2">
+ <div class="flex justify-between items-center">
+ <div>
+ <div class="text-xs font-bold text-chatgpt-text">Context Precision</div>
+ <div class="text-[11px] text-chatgpt-subtle">Signal-to-noise ratio in retrieved passages</div>
+ </div>
+ <span class="text-base font-mono font-bold text-chatgpt-green">0.920</span>
+ </div>
+ <div class="w-full bg-chatgpt-sidebar rounded-full h-2 overflow-hidden">
+ <div class="bg-chatgpt-green h-full w-[92%]"></div>
+ </div>
+ </div>
 
-          <!-- CI/CD Gate Release Banner -->
-          <div class="p-3 rounded-xl bg-chatgpt-input border border-chatgpt-border flex justify-between items-center text-xs">
-            <div>
-              <span class="font-bold text-chatgpt-green">✓ CI/CD Quality Gate: READY FOR RELEASE</span>
-              <p class="text-[11px] text-chatgpt-subtle">Passed 3/3 Golden Benchmarks (Score: 0.957)</p>
-            </div>
-            <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-chatgpt-sidebar text-chatgpt-muted">Exit Code: 0</span>
-          </div>
+ <!-- CI/CD Gate Release Banner -->
+ <div class="p-3 rounded-xl bg-chatgpt-input border border-chatgpt-border flex justify-between items-center text-xs">
+ <div>
+ <span class="font-bold text-chatgpt-green"> CI/CD Quality Gate: READY FOR RELEASE</span>
+ <p class="text-[11px] text-chatgpt-subtle">Passed 3/3 Golden Benchmarks (Score: 0.957)</p>
+ </div>
+ <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-chatgpt-sidebar text-chatgpt-muted">Exit Code: 0</span>
+ </div>
 
-        </div>
+ </div>
 
-      </div>
+ </div>
 
-    </div>
+ </div>
 
-  </div>
+ </div>
 
-  <script>
-    function loadSampleTrace(type) {
-      if (type === 'rag') {
-        document.getElementById('trace-id-badge').textContent = 'Trace: tr_99a81b2c';
-      } else {
-        document.getElementById('trace-id-badge').textContent = 'Trace: tr_multi_agent_04';
-      }
-    }
+ <script>
+ function loadSampleTrace(type) {
+ if (type === 'rag') {
+ document.getElementById('trace-id-badge').textContent = 'Trace: tr_99a81b2c';
+ } else {
+ document.getElementById('trace-id-badge').textContent = 'Trace: tr_multi_agent_04';
+ }
+ }
 
-    function runTraceEval() {
-      const btn = document.querySelector('header button');
-      btn.textContent = 'Evaluating...';
-      setTimeout(() => {
-        btn.textContent = '⚡ Run Trace & Eval';
-        alert('Trace Execution & Triad Evaluation Completed in 0.62ms!');
-      }, 300);
-    }
-  </script>
+ function runTraceEval() {
+ const btn = document.querySelector('header button');
+ btn.textContent = 'Evaluating...';
+ setTimeout(() => {
+ btn.textContent = ' Run Trace & Eval';
+ alert('Trace Execution & Triad Evaluation Completed in 0.62ms!');
+ }, 300);
+ }
+ </script>
 </body>
 </html>

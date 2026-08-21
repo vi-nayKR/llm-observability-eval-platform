@@ -1,8 +1,8 @@
-# 📘 Phase 3: Automated CI/CD Regression Quality Gate
+# Phase 3: Automated CI/CD Regression Quality Gate
 
 ---
 
-## 🎯 1. Overview & Objective
+## 1. Overview & Objective
 
 When modifying prompt templates, switching model versions (e.g. `gpt-4o` $\rightarrow$ `Llama-3.2-3B`), or tweaking RAG chunking parameters, software teams risk introducing **unintended quality regressions**.
 - Standard software unit tests only verify syntax and HTTP codes (200 OK), remaining completely blind to semantic degradation, increased hallucination rates, or dropped context precision.
@@ -15,30 +15,30 @@ When modifying prompt templates, switching model versions (e.g. `gpt-4o` $\right
 
 ---
 
-## 📐 2. Continuous Quality Gating Architecture
+## 2. Continuous Quality Gating Architecture
 
 ```
-┌─────────────────────────────────────────────────────────────────────────────┐
-│                    CI/CD AUTOMATED REGRESSION GATE FLOW                     │
-├─────────────────────────────────────────────────────────────────────────────┤
-│  Pull Request Trigger ──► [ Golden Test Dataset Runner ]                    │
-│                                    │                                        │
-│                                    ▼                                        │
-│                        [ Triad Metric Evaluator ]                           │
-│                                    │                                        │
-│                                    ▼                                        │
-│                    [ Baseline Delta Comparator ]                            │
-│                                    │                                        │
-│                    ┌───────────────┴───────────────┐                        │
-│                    ▼                               ▼                        │
-│        ✓ PASS: Scores >= Threshold     ❌ FAIL: Quality Regression Detected │
-│          (Exit Code: 0 -> Merge PR)      (Exit Code: 1 -> Block PR Release) │
-└─────────────────────────────────────────────────────────────────────────────┘
+
+ CI/CD AUTOMATED REGRESSION GATE FLOW 
+
+ Pull Request Trigger [ Golden Test Dataset Runner ] 
+ 
+ 
+ [ Triad Metric Evaluator ] 
+ 
+ 
+ [ Baseline Delta Comparator ] 
+ 
+ 
+ 
+ PASS: Scores >= Threshold FAIL: Quality Regression Detected 
+ (Exit Code: 0 -> Merge PR) (Exit Code: 1 -> Block PR Release) 
+
 ```
 
 ---
 
-## 🛠️ 3. Step-by-Step Code Walkthrough
+## 3. Step-by-Step Code Walkthrough
 
 ### Step 1: CI/CD Data Models (`src/ci_cd/models.py`)
 - `GoldenTestCase`: Test item with `case_id`, `query`, `context`, `expected_ground_truth`, and minimum score thresholds.
@@ -51,7 +51,7 @@ When modifying prompt templates, switching model versions (e.g. `gpt-4o` $\right
 
 ---
 
-## 🧪 4. How to Run & Verify Phase 3
+## 4. How to Run & Verify Phase 3
 
 ### Command:
 ```bash
@@ -70,7 +70,7 @@ When modifying prompt templates, switching model versions (e.g. `gpt-4o` $\right
 
 ---
 
-## 💡 5. Technical Questions & Architectural Explanations
+## 5. Technical Questions & Architectural Explanations
 
 ### Q: How do you select test cases for an enterprise golden evaluation dataset?
 > **Answer:** Golden datasets are constructed by combining three sources:

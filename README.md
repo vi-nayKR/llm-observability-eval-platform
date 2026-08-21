@@ -1,6 +1,6 @@
 <div align="center">
 
-# 🔭 Enterprise LLM Observability, Evaluation & CI/CD Guardrails Platform
+# Enterprise LLM Observability, Evaluation & CI/CD Guardrails Platform
 ### OpenTelemetry Tracing · Ragas Evaluation Triad · Automated CI/CD Regression Gating · Real-Time Anomaly & Cost Drift Detection
 
 [![Python Version](https://img.shields.io/badge/Python-3.11%20%7C%203.12%20%7C%203.14-3776AB?style=flat-square&logo=python&logoColor=white)](https://www.python.org/)
@@ -17,7 +17,7 @@
 
 </div>
 
-## 📌 Executive Summary
+## Executive Summary
 
 Deploying Generative AI applications without quantitative evaluation and distributed tracing exposes enterprises to **silent hallucinations, prompt quality regressions, and unbounded token cost spikes**.
 
@@ -29,7 +29,7 @@ The **LLM Observability & Evaluation Platform** provides a comprehensive end-to-
 
 ---
 
-## 📚 Phased Implementation Guides
+## Phased Implementation Guides
 
 The platform is engineered across 6 modular, production-tested phases with dedicated architectural documentation:
 
@@ -44,43 +44,43 @@ The platform is engineered across 6 modular, production-tested phases with dedic
 
 ---
 
-## 🏛️ System Architecture
+## System Architecture
 
 ```mermaid
 flowchart TD
-    UserQuery["📱 User Prompt / Multi-Agent Request"] --> TraceCollector["⚡ OpenTelemetry Trace Collector (OTel/OpenInference)"]
+ UserQuery[" User Prompt / Multi-Agent Request"] --> TraceCollector[" OpenTelemetry Trace Collector (OTel/OpenInference)"]
 
-    subgraph TracingTier ["Distributed Tracing Layer"]
-        TraceCollector --> AgentSpan["[AGENT] Supervisor Graph Span"]
-        AgentSpan --> RetSpan["[RETRIEVER] pgvector HNSW Search (45ms)"]
-        AgentSpan --> LLMSpan["[LLM] Model Generation Span (580ms)"]
-        AgentSpan --> ToolSpan["[TOOL] External Tool Execution Span (1.2ms)"]
-    end
+ subgraph TracingTier ["Distributed Tracing Layer"]
+ TraceCollector --> AgentSpan["[AGENT] Supervisor Graph Span"]
+ AgentSpan --> RetSpan["[RETRIEVER] pgvector HNSW Search (45ms)"]
+ AgentSpan --> LLMSpan["[LLM] Model Generation Span (580ms)"]
+ AgentSpan --> ToolSpan["[TOOL] External Tool Execution Span (1.2ms)"]
+ end
 
-    subgraph EvalTier ["Evaluation Triad Layer"]
-        LLMSpan --> TriadEngine["📊 Ragas / DeepEval Triad Engine"]
-        TriadEngine --> Faithfulness["✓ Faithfulness Score (1.000)"]
-        TriadEngine --> Relevance["✓ Answer Relevance (0.950)"]
-        TriadEngine --> ContextPrecision["✓ Context Precision (0.920)"]
-    end
+ subgraph EvalTier ["Evaluation Triad Layer"]
+ LLMSpan --> TriadEngine[" Ragas / DeepEval Triad Engine"]
+ TriadEngine --> Faithfulness[" Faithfulness Score (1.000)"]
+ TriadEngine --> Relevance[" Answer Relevance (0.950)"]
+ TriadEngine --> ContextPrecision[" Context Precision (0.920)"]
+ end
 
-    subgraph GatingTier ["CI/CD Quality Gate"]
-        TriadEngine --> CICDGate["🛡️ Automated Regression Gate"]
-        CICDGate --> ReleaseDecision{"Delta >= Threshold?"}
-        ReleaseDecision -->|PASS: Exit 0| Deploy["🚀 Merge PR & Deploy to Production"]
-        ReleaseDecision -->|FAIL: Exit 1| Block["❌ Block Deployment & Trigger Alert"]
-    end
+ subgraph GatingTier ["CI/CD Quality Gate"]
+ TriadEngine --> CICDGate[" Automated Regression Gate"]
+ CICDGate --> ReleaseDecision{"Delta >= Threshold?"}
+ ReleaseDecision -->|PASS: Exit 0| Deploy[" Merge PR & Deploy to Production"]
+ ReleaseDecision -->|FAIL: Exit 1| Block[" Block Deployment & Trigger Alert"]
+ end
 
-    subgraph TelemetryTier ["Operational Drift Layer"]
-        TraceCollector --> DriftDetector["🚨 Real-Time Anomaly & Cost Detector"]
-        DriftDetector --> LatencyP95["Tail Latency (p95 / p99)"]
-        DriftDetector --> CostCap["Hourly Token Budget Cap ($50.00)"]
-    end
+ subgraph TelemetryTier ["Operational Drift Layer"]
+ TraceCollector --> DriftDetector[" Real-Time Anomaly & Cost Detector"]
+ DriftDetector --> LatencyP95["Tail Latency (p95 / p99)"]
+ DriftDetector --> CostCap["Hourly Token Budget Cap ($50.00)"]
+ end
 ```
 
 ---
 
-## ⚡ Key Engineering Highlights
+## Key Engineering Highlights
 
 ### 1. OpenTelemetry & OpenInference Semantic Conventions
 Captures end-to-end execution trees with microsecond timestamps:
@@ -100,7 +100,7 @@ Integrates directly into GitHub Actions and GitLab CI:
 
 ---
 
-## 📊 Performance Benchmarks
+## Performance Benchmarks
 
 Results from our 50-worker concurrency benchmark harness (`tests/benchmark_observability.py`):
 
@@ -113,7 +113,7 @@ Results from our 50-worker concurrency benchmark harness (`tests/benchmark_obser
 
 ---
 
-## 🚀 Quickstart & Local Setup
+## Quickstart & Local Setup
 
 ### 1. Clone & Setup
 ```bash
@@ -131,7 +131,7 @@ Open [**http://localhost:8000**](http://localhost:8000) in your browser to inspe
 
 ---
 
-## 🧪 Running Automated Tests
+## Running Automated Tests
 
 ```bash
 ./.venv/bin/pytest
@@ -140,12 +140,12 @@ Open [**http://localhost:8000**](http://localhost:8000) in your browser to inspe
 
 ---
 
-## 👥 Contributors
+## Contributors
 
 - **Vinay K R** ([@vi-nayKR](https://github.com/vi-nayKR)) — Lead Architect & MLOps Engineer
 
 ---
 
-## 📄 License
+## License
 
 This project is licensed under the MIT License — see the [LICENSE](LICENSE) file for details.
