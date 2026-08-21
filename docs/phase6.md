@@ -25,10 +25,10 @@ In enterprise production LLM operations, platform engineers require a **single-p
  LEFT PANE: Trace Timeline & Tree RIGHT PANE: Triad Eval & Telemetry 
 
  • Trace ID: tr_99a81b2c (642ms) • Ragas Evaluation Triad Scores: 
- • Visual Waterfall Spans: [🟩 Faithfulness: 1.000] 
- Retriever (45ms) [🟩 Answer Relevance: 0.950] 
- Redis Cache Tool (1.2ms) [🟩 Context Precision: 0.920] 
- LLM Generation (580ms) [🟩 Toxicity: 0.000] 
+ • Visual Waterfall Spans: [[PASS]  Faithfulness: 1.000] 
+ Retriever (45ms) [[PASS]  Answer Relevance: 0.950] 
+ Redis Cache Tool (1.2ms) [[PASS]  Context Precision: 0.920] 
+ LLM Generation (580ms) [[PASS]  Toxicity: 0.000] 
  
  • Test Trace Presets: • CI/CD Quality Gate Status: 
  (RAG Q&A, Multi-Agent Loop) Status: PASSED (Pass Rate: 100%)
