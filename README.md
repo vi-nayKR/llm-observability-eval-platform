@@ -1,3 +1,13 @@
+# Archived learning prototype
+
+This repository is retained as a learning prototype, not a production LLM evaluation or OpenTelemetry platform. The implementation uses token-overlap heuristics in `src/evals/evaluator.py` and in-memory custom trace records in `src/tracing/collector.py`. Its dependencies do not integrate Ragas, DeepEval, or the OpenTelemetry SDK.
+
+The historical README below contains unsupported production and benchmark language. Its latency and throughput comparisons must not be used as evidence of real model evaluation, hallucination detection, distributed tracing, or production capacity. The benchmark script also needs indentation repair before it can run.
+
+For the actively presented reference with actual typed workflow control and telemetry integration, see [FastAPI + LangGraph Agent Patterns](https://github.com/vi-nayKR/fastapi-genai-agent-patterns). For financial document review, see [ReconcileAI](https://github.com/vi-nayKR/multimodal-document-intelligence).
+
+---
+
 <div align="center">
 
 # Enterprise LLM Observability, Evaluation & CI/CD Guardrails Platform
